@@ -9,7 +9,7 @@ import torch.optim as optim
 import torch.multiprocessing as mp
 import torch.nn as nn
 import torch.nn.functional as F
-from envs import create_atari_env
+from envs.attention_env import *
 from model import ActorCritic
 from train import train
 from test import test
@@ -33,8 +33,6 @@ parser.add_argument('--num-steps', type=int, default=20, metavar='NS',
                     help='number of forward steps in A3C (default: 20)')
 parser.add_argument('--max-episode-length', type=int, default=10000, metavar='M',
                     help='maximum length of an episode (default: 10000)')
-parser.add_argument('--env-name', default='PongDeterministic-v3', metavar='ENV',
-                    help='environment to train on (default: PongDeterministic-v3)')
 parser.add_argument('--no-shared', default=False, metavar='O',
                     help='use an optimizer without shared momentum.')
 
@@ -44,7 +42,7 @@ if __name__ == '__main__':
 
     torch.manual_seed(args.seed)
 
-    env = create_atari_env(args.env_name)
+    env = AttentionEnv(complex=COMPLEX, sum_reward=SUM_REWARD, static=STATIC)
     shared_model = ActorCritic(
         env.observation_space.shape[0], env.action_space)
     shared_model.share_memory()
