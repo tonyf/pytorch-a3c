@@ -1,5 +1,5 @@
-from attention_board import AttentionBoard
-from board_display import *
+from . attention_board import AttentionBoard
+# from . board_display import *
 
 from PIL import Image
 
@@ -49,6 +49,7 @@ class AttentionEnv:
         if self._sum_reward:
             # if step_reward > 0 and self.reward < 0:
                 # self.reward = self.reward / 2
+            if step_reward < 0: step_reward = -1
             self.reward += step_reward
         else:
             self.reward = step_reward
@@ -66,8 +67,4 @@ class AttentionEnv:
         return torch.stack(self.frames, dim=2).numpy()
 
     def render(self, mode='human', close=False):
-        if mode == 'human':
-            if self.display == None:
-                self.display = BoardDisplay(SIZE, SIZE)
-            self.display.render_update(self.board)
         return torch.stack(self.frames, dim=2).numpy()

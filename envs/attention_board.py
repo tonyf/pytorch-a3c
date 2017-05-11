@@ -20,7 +20,7 @@ MOVES = {   0: [ 0,  0],
             8: [ 1,  1],
         }
 
-class AttentionBoard(object):
+class AttentionBoard:
     def __init__(self, size, radius=2, timestep=.25, speed=1.5):
         self.board = np.zeros((size, size), dtype=float)
         self.size = size
@@ -37,7 +37,10 @@ class AttentionBoard(object):
         self.update_board()
 
     def step(self, action):
-        move = int(action[0])
+        if isinstance(action, np.ndarray):
+            move = action[0][0]
+        else:
+            move = action
         if move < 0 or move > MAX_MOVE:
             return -1.
         self.agent = self.constrain_pos(self.agent + self.speed*np.asarray(MOVES[move]))
@@ -108,8 +111,8 @@ class AttentionBoard(object):
         r_squared = radius*radius
 
         circle_points = []
-        for x in xrange(x_center-radius, x_center+radius):
-            for y in xrange(y_center-radius, y_center+radius):
+        for x in range(x_center-radius, x_center+radius):
+            for y in range(y_center-radius, y_center+radius):
                 if (x-x_center)*(x-x_center) + (y-y_center)*(y_center) <= r_squared:
                     x_sym = x_center - (x - x_center)
                     y_sym = y_center - (y - y_center)
