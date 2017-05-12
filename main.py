@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
     torch.manual_seed(args.seed)
 
-    env = AttentionEnv(complex=COMPLEX, sum_reward=SUM_REWARD, static=STATIC)
+    env = AttentionEnv(complex=False, sum_reward=True, static=True)
     shared_model = ActorCritic(
         env.observation_space.shape[0], env.action_space)
     shared_model.share_memory()

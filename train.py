@@ -21,7 +21,7 @@ def ensure_shared_grads(model, shared_model):
 def train(rank, args, shared_model, optimizer=None):
     torch.manual_seed(args.seed + rank)
 
-    env = AttentionEnv(complex=COMPLEX, sum_reward=SUM_REWARD, static=STATIC)
+    env = AttentionEnv(complex=False, sum_reward=True, static=True)
 
     model = ActorCritic(env.observation_space.shape[0], env.action_space)
 
@@ -53,7 +53,7 @@ def train(rank, args, shared_model, optimizer=None):
 
         for step in range(args.num_steps):
             value, logit, (hx, cx) = model(
-                (Variable(state.unsqueeze(0)), (hx, cx)))
+                (Variable(state.double().unsqueeze(0)), (hx, cx)))
             prob = F.softmax(logit)
             log_prob = F.log_softmax(logit)
             entropy = -(log_prob * prob).sum(1)

@@ -6,22 +6,20 @@ DOT=225
 WALLS=127
 AGENT=85
 
-first = True
-
 MAX_MOVE=8
 MOVES = {   0: [ 0,  0],
             1: [-1,  0],
             2: [ 1,  0],
-            3: [-1,  0],
-            4: [ 1,  0],
+            3: [0,  -1],
+            4: [ 0,  1],
             5: [-1, -1],
             6: [ 1, -1],
             7: [-1,  1],
             8: [ 1,  1],
         }
 
-class AttentionBoard:
-    def __init__(self, size, radius=2, timestep=.25, speed=1.5):
+class AttentionBoard(object):
+    def __init__(self, size, radius=1, timestep=.25, speed=1):
         self.board = np.zeros((size, size), dtype=float)
         self.size = size
         self.radius = radius
@@ -29,34 +27,30 @@ class AttentionBoard:
         self.time = 0.0
         self.speed = speed
 
-        self.dot = np.array([size/2, size/2], dtype=float)
         self.dot_v = np.zeros((2))
         self.dot_a = np.zeros((2))
-
+        self.dot = self.constrain_pos(np.random.randint(self.size, size=2))
+        
         self.agent = self.constrain_pos(np.random.randint(self.size, size=2))
         self.update_board()
 
-    def step(self, action):
-        if isinstance(action, np.ndarray):
-            move = action[0][0]
-        else:
-            move = action
+    def step(self, move):
         if move < 0 or move > MAX_MOVE:
-            return -1.
+            return -1 * self.size * self.size
         self.agent = self.constrain_pos(self.agent + self.speed*np.asarray(MOVES[move]))
         self.update_board()
-        return self.reward(mode='distance')
+        return self.reward(mode='binary')
         
 
     """ Get reward for being attentive to a certain pixel """
     def reward(self, scale=1, mode='binary'):
         # if np.array_equal(self.agent, self.dot):
         if self.does_overlap(self.agent, self.dot):
-            return 1.0 * scale
+            return 1.
         if mode == 'binary':
-            return 0.0
+            return -1.
         if mode == 'distance':
-            return -1 * np.linalg.norm(self.dot - self.agent)
+            return -1 + (1 / np.linalg.norm(self.dot - self.agent))
 
 
     """ Get image from board """
@@ -66,7 +60,7 @@ class AttentionBoard:
     """ Update the board  """
     def next(self, acceleration=None, mode='random'):
         if mode == 'static':
-            done = np.array_equal(self.agent, self.dot)
+            done = self.does_overlap(self.agent, self.dot)
             return (self.image(), done)
         if acceleration:
             return (self._next(acceleration), False)

@@ -36,7 +36,7 @@ class ActorCritic(torch.nn.Module):
 
     def __init__(self, num_inputs, action_space):
         super(ActorCritic, self).__init__()
-        self.conv1 = nn.Conv2d(num_inputs, 32, 3, stride=2, padding=1)
+        self.conv1 = nn.Conv2d(4, 32, 3, stride=2, padding=1)
         self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
         self.conv3 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
         self.conv4 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
@@ -57,6 +57,8 @@ class ActorCritic(torch.nn.Module):
 
         self.lstm.bias_ih.data.fill_(0)
         self.lstm.bias_hh.data.fill_(0)
+
+        self.conv1.double()
 
         self.train()
 

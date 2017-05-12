@@ -1,11 +1,13 @@
-from Tkinter import *
+from tkinter import *
 
 SCALE=3
 
 class BoardDisplay:
 
     def __init__(self, width, height):
+        print("Here")
         self.root = Tk()
+        print("Here1")
         self.root.resizable(width=False, height=False)
         self.canvas = Canvas(width=SCALE*width, height=SCALE*height, bg='black')
         self.canvas.pack(fill=BOTH, expand=YES)

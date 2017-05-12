@@ -16,7 +16,7 @@ from collections import deque
 def test(rank, args, shared_model):
     torch.manual_seed(args.seed + rank)
 
-    env = AttentionEnv(complex=COMPLEX, sum_reward=SUM_REWARD, static=STATIC)
+    env = AttentionEnv(complex=False, sum_reward=True, static=True)
 
     model = ActorCritic(env.observation_space.shape[0], env.action_space)
 
