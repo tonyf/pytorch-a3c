@@ -45,7 +45,7 @@ class AttentionEnv:
         self.frames.popleft()
         self.frames.append(obs)
         state = self.stack_frames()
-        return (obs, self.reward, done, None)
+        return (state, self.reward, done, None)
 
     def reset(self):
         self.board = AttentionBoard(SIZE)
