@@ -53,7 +53,7 @@ def train(rank, args, shared_model, optimizer=None):
 
         for step in range(args.num_steps):
             value, logit, (hx, cx) = model(
-                (Variable(state.double().unsqueeze(0)), (hx, cx)))
+                (Variable(state.unsqueeze(0)), (hx, cx)))
             prob = F.softmax(logit)
             log_prob = F.log_softmax(logit)
             entropy = -(log_prob * prob).sum(1)

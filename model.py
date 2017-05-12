@@ -36,16 +36,16 @@ class ActorCritic(torch.nn.Module):
 
     def __init__(self, num_inputs, action_space):
         super(ActorCritic, self).__init__()
-        self.conv1 = nn.Conv2d(4, 32, 3, stride=2, padding=1)
-        self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
-        self.conv3 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
-        self.conv4 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
+        self.conv1 = nn.Conv2d(4, 32, 3, stride=2, padding=1).double()
+        self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1).double()
+        self.conv3 = nn.Conv2d(32, 32, 3, stride=2, padding=1).double()
+        self.conv4 = nn.Conv2d(32, 32, 3, stride=2, padding=1).double()
 
-        self.lstm = nn.LSTMCell(96, 256)
+        self.lstm = nn.LSTMCell(96, 256).double()
 
         num_outputs = 9
-        self.critic_linear = nn.Linear(256, 1)
-        self.actor_linear = nn.Linear(256, num_outputs)
+        self.critic_linear = nn.Linear(256, 1).double()
+        self.actor_linear = nn.Linear(256, num_outputs).double()
 
         self.apply(weights_init)
         self.actor_linear.weight.data = normalized_columns_initializer(
@@ -58,7 +58,6 @@ class ActorCritic(torch.nn.Module):
         self.lstm.bias_ih.data.fill_(0)
         self.lstm.bias_hh.data.fill_(0)
 
-        self.conv1.double()
 
         self.train()
 
