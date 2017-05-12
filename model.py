@@ -36,16 +36,16 @@ class ActorCritic(torch.nn.Module):
 
     def __init__(self, num_inputs, action_space):
         super(ActorCritic, self).__init__()
-        self.conv1 = nn.Conv2d(3, 32, 3, stride=2, padding=1).double()
-        self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1).double()
-        self.conv3 = nn.Conv2d(32, 32, 3, stride=2, padding=1).double()
-        self.conv4 = nn.Conv2d(32, 32, 3, stride=2, padding=1).double()
+        self.conv1 = nn.Conv2d(3, 32, 3, stride=2, padding=1)
+        self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
+        self.conv3 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
+        self.conv4 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
 
-        self.lstm = nn.LSTMCell(96, 256).double()
+        self.lstm = nn.LSTMCell(128, 256)
 
         num_outputs = 9
-        self.critic_linear = nn.Linear(256, 1).double()
-        self.actor_linear = nn.Linear(256, num_outputs).double()
+        self.critic_linear = nn.Linear(256, 1)
+        self.actor_linear = nn.Linear(256, num_outputs)
 
         self.apply(weights_init)
         self.actor_linear.weight.data = normalized_columns_initializer(
@@ -69,7 +69,7 @@ class ActorCritic(torch.nn.Module):
         x = F.elu(self.conv3(x))
         x = F.elu(self.conv4(x))
 
-        x = x.view(-1, 96)
+        x = x.view(-1, 128)
         hx, cx = self.lstm(x, (hx, cx))
         x = hx
 

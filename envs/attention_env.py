@@ -31,7 +31,7 @@ class AttentionEnv:
         else: self.mode=None
     
     def stack_frames(self):
-        return np.stack(list(self.frames), 0)
+        return np.stack(list(self.frames), 0).astype('float32')
 
     def step(self, action):
         step_reward = self.board.step(action)
