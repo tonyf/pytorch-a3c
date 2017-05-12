@@ -36,7 +36,7 @@ class ActorCritic(torch.nn.Module):
 
     def __init__(self, num_inputs, action_space):
         super(ActorCritic, self).__init__()
-        self.conv1 = nn.Conv2d(4, 32, 3, stride=2, padding=1).double()
+        self.conv1 = nn.Conv2d(3, 32, 3, stride=2, padding=1).double()
         self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1).double()
         self.conv3 = nn.Conv2d(32, 32, 3, stride=2, padding=1).double()
         self.conv4 = nn.Conv2d(32, 32, 3, stride=2, padding=1).double()

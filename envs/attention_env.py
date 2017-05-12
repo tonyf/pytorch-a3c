@@ -51,7 +51,7 @@ class AttentionEnv:
         self.board = AttentionBoard(SIZE)
         self.reward = 0.
         frame = self.board.image()
-        self.frames = deque([frame]*4)
+        self.frames = deque([frame]*3)
         return self.stack_frames()
 
     def render(self, mode='human', close=False):
