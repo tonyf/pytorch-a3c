@@ -35,6 +35,7 @@ class AttentionBoard(object):
         self.update_board()
 
     def step(self, move):
+        move = move[0][0] 
         if move < 0 or move > MAX_MOVE:
             return -1 * self.size * self.size
         self.agent = self.constrain_pos(self.agent + self.speed*np.asarray(MOVES[move]))
